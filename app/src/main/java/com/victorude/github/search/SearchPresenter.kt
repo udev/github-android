@@ -1,6 +1,5 @@
 package com.victorude.github.search
 
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -8,7 +7,7 @@ import android.view.View
 import android.widget.SearchView
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent
-import com.victorude.github.BasePresenter
+import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
@@ -23,12 +22,10 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class SearchPresenter @Inject constructor() : BasePresenter<String> {
+open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
 
     @Inject
     lateinit var github: GitHubService
-
-    lateinit var mvpView: View
     lateinit var search: SearchView
     override val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -60,13 +57,6 @@ open class SearchPresenter @Inject constructor() : BasePresenter<String> {
                 .subscribe()
 
         compositeDisposable.add(searchIntent)
-    }
-
-    // update model based on user intent here
-    fun onFabClick(v: View) {
-        // update the view after model changes
-        Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
     }
 
     // handle search view events

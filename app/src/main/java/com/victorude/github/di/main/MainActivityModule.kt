@@ -1,13 +1,12 @@
-package com.victorude.github.di
+package com.victorude.github.di.main
 
 import android.app.Activity
 import com.victorude.github.MainActivity
 import dagger.Binds
-import dagger.Component
 import dagger.Module
 import dagger.android.ActivityKey
-import dagger.multibindings.IntoMap
 import dagger.android.AndroidInjector
+import dagger.multibindings.IntoMap
 
 @Module(subcomponents = [MainActivitySubcomponent::class])
 abstract class MainActivityModule {
@@ -16,9 +15,4 @@ abstract class MainActivityModule {
     @ActivityKey(MainActivity::class)
     abstract fun bindMainActivityInjectorFactory(builder: MainActivitySubcomponent.Builder)
             : AndroidInjector.Factory<out Activity>
-}
-
-@Component(modules = [MainActivityModule::class])
-interface AppComponent {
-    fun inject(app: App)
 }

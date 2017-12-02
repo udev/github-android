@@ -1,4 +1,4 @@
-package com.victorude.github.di
+package com.victorude.github.di.main
 
 import com.victorude.github.MainActivity
 import dagger.Subcomponent

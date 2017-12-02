@@ -21,23 +21,26 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SearchPresenter(override var mvpView: View, private var search: SearchView)
-    : BasePresenter<String> {
+open class SearchPresenter @Inject constructor() : BasePresenter<String> {
 
+    @Inject
+    lateinit var github: GitHubService
+
+    lateinit var mvpView: View
+    lateinit var search: SearchView
     override val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private val gitHub by lazy {
-        //TODO: this service should be injected with dagger
-        GitHubService.service
-    }
 
-    init {
-        this.search = search
+    override fun setView(view: View) {
+        mvpView = view
+
+        this.search = mvpView.findViewById(R.id.search)
 
         val searchIntent: Disposable = getIntent().startWith("")
                 .doOnNext({ queryString ->
                     if (!queryString.isEmpty()) {
-                        gitHub.search(mapOf("q" to queryString))
+                        github.search(mapOf("q" to queryString))
                                 .enqueue(object : Callback<Result<List<Repo>>> {
                                     override fun onFailure(call: Call<Result<List<Repo>>>?, t: Throwable?) {
                                         //TODO: update error handling to notify the user

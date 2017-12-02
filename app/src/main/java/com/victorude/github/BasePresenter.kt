@@ -5,9 +5,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
 interface BasePresenter<T> {
-    var mvpView: View
     val compositeDisposable: CompositeDisposable
 
+    fun setView(view: View)
     fun getIntent(): Observable<T>
     fun destroy()
 }

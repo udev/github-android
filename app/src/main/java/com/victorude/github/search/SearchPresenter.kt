@@ -10,10 +10,10 @@ import com.jakewharton.rxbinding2.widget.RxSearchView
 import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
+import com.victorude.github.common.ARG_REPO
+import com.victorude.github.common.ARG_USER
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
-import com.victorude.github.repo.ARG_REPO
-import com.victorude.github.repo.ARG_USER
 import com.victorude.github.repo.RepoDetailFragment
 import com.victorude.github.service.GitHubService
 import io.reactivex.Observable

@@ -4,6 +4,8 @@ import android.content.Context
 import com.victorude.github.BasePresenter
 import com.victorude.github.MvpFragment
 import com.victorude.github.R
+import com.victorude.github.common.ARG_REPO
+import com.victorude.github.common.ARG_USER
 import javax.inject.Inject
 
 class RepoDetailFragment : MvpFragment() {

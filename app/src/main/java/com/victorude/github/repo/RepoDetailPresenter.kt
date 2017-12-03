@@ -12,9 +12,6 @@ import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
-const val ARG_USER = "com.victorude.github.repo.RepoDetailPresenter.user"
-const val ARG_REPO = "com.victorude.github.repo.RepoDetailPresenter.repo"
-
 class RepoDetailPresenter @Inject constructor() : BasePresenterImpl<Repo>() {
 
     @Inject

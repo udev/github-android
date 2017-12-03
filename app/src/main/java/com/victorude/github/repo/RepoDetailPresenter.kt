@@ -1,6 +1,5 @@
 package com.victorude.github.repo
 
-import android.util.Log
 import android.view.View
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.model.Repo
@@ -10,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 const val ARG_USER = "com.victorude.github.repo.RepoDetailPresenter.user"
@@ -32,12 +32,11 @@ class RepoDetailPresenter @Inject constructor() : BasePresenterImpl<Repo>() {
                 .enqueue(object : Callback<Repo> {
                     override fun onFailure(call: Call<Repo>?, t: Throwable?) {
                         //TODO: update error handling to notify the user
-                        Log.d("TAG", t?.message)
+                        Timber.tag("TAG").d(t?.message, t)
                     }
 
                     override fun onResponse(call: Call<Repo>?, response: Response<Repo>?) {
                         details = response?.body()
-                        Log.d("MERP", details.toString())
                     }
                 })
     }

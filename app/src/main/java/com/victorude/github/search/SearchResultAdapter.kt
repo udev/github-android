@@ -2,7 +2,6 @@ package com.victorude.github.search
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.victorude.github.databinding.ResultRepoItemBinding
 import com.victorude.github.model.Repo
@@ -10,18 +9,16 @@ import com.victorude.github.model.Result
 
 class SearchResultAdapter(
         private val results: Result<List<Repo>>,
-        val onClickListener: SearchItemClickListener)
-    : RecyclerView.Adapter<SearchResultAdapter.Companion.ViewHolder>() {
+        private val onClickListener: SearchItemClickListener)
+    : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val repo: Repo = results.items[position]
         holder.bind(repo)
-        holder.itemView.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View?) {
-                val args = repo.full_name.split('/')
-                onClickListener.onItemClick(args[0], args[1])
-            }
-        })
+        holder.itemView.setOnClickListener {
+            val args = repo.full_name.split('/')
+            onClickListener.onItemClick(args[0], args[1])
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,12 +31,10 @@ class SearchResultAdapter(
         return results.items.size
     }
 
-    companion object {
-        class ViewHolder(private val binding: ResultRepoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(repo: Repo) {
-                binding.repo = repo
-                binding.executePendingBindings()
-            }
+    class ViewHolder(private val binding: ResultRepoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(repo: Repo) {
+            binding.repo = repo
+            binding.executePendingBindings()
         }
     }
 }

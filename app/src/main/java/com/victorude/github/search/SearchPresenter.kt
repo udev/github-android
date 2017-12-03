@@ -1,5 +1,7 @@
 package com.victorude.github.search
 
+import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -11,6 +13,9 @@ import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
+import com.victorude.github.repo.ARG_REPO
+import com.victorude.github.repo.ARG_USER
+import com.victorude.github.repo.RepoDetailFragment
 import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,7 +35,7 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
     override val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun setView(view: View) {
-        mvpView = view
+        super.setView(view)
 
         this.search = mvpView.findViewById(R.id.search)
 
@@ -45,10 +50,15 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                                     }
 
                                     override fun onResponse(call: Call<Result<List<Repo>>>?, response: Response<Result<List<Repo>>>?) {
-                                        val results: Result<List<Repo>>? = response!!.body()
+                                        val results: Result<List<Repo>> = response!!.body() ?: return
                                         val resultsView: RecyclerView = mvpView.findViewById(R.id.results)
                                         resultsView.layoutManager = LinearLayoutManager(mvpView.context)
-                                        resultsView.adapter = SearchResultAdapter(results!!)
+                                        resultsView.adapter = SearchResultAdapter(results, object : SearchItemClickListener() {
+                                            override fun onItemClick(user: String, repo: String) {
+                                                showDetails(user, repo)
+                                            }
+
+                                        })
                                     }
                                 })
                     }
@@ -57,6 +67,19 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 .subscribe()
 
         compositeDisposable.add(searchIntent)
+    }
+
+    private fun showDetails(user: String, repo: String) {
+        val fragment = RepoDetailFragment()
+        val bundle = Bundle()
+        bundle.putString(ARG_USER, user)
+        bundle.putString(ARG_REPO, repo)
+        fragment.arguments = bundle
+        val activity: FragmentActivity = mvpView.context as FragmentActivity
+        activity.fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack("search")
+                .commit()
     }
 
     // handle search view events

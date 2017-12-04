@@ -27,8 +27,8 @@ class SearchResultAdapter(
     }
 
     private fun loadImage(avatar_url: String, view: View) {
-        val imageView: ImageView = view.findViewById<ImageView>(R.id.icon)
-        Picasso.with(view.context).load(avatar_url).into(imageView);
+        val imageView: ImageView = view.findViewById(R.id.icon)
+        Picasso.with(view.context).load(avatar_url).into(imageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

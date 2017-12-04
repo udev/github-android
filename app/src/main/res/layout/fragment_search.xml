@@ -7,7 +7,7 @@
 
         <variable
             name="user"
-            type="com.victorude.github.user.User" />
+            type="com.victorude.github.model.User" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout

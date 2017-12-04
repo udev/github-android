@@ -1,7 +1,5 @@
 package com.victorude.github.model
 
-import com.victorude.github.user.User
-
 data class Repo(
     val id: Long,
     val name: String,

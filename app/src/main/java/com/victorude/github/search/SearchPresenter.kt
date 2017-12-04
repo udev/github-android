@@ -40,32 +40,34 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
         this.search = mvpView.findViewById(R.id.search)
 
         val searchIntent: Disposable = getIntent().startWith("")
-                .skipWhile { queryString -> queryString.isEmpty() }
-                .doOnNext({ queryString ->
-                    github.search(mapOf("q" to queryString))
-                            .enqueue(object : Callback<Result<List<Repo>>> {
-                                override fun onFailure(call: Call<Result<List<Repo>>>?, t: Throwable?) {
-                                    //TODO: update error handling to notify the user
-                                    Timber.tag("TAG").d(t?.message, t)
-                                }
-
-                                override fun onResponse(call: Call<Result<List<Repo>>>?, response: Response<Result<List<Repo>>>?) {
-                                    val results: Result<List<Repo>> = response!!.body() ?: return
-                                    val resultsView: RecyclerView = mvpView.findViewById(R.id.results)
-                                    resultsView.layoutManager = LinearLayoutManager(mvpView.context)
-                                    resultsView.adapter = SearchResultAdapter(results, object : SearchItemClickListener() {
-                                        override fun onItemClick(user: String, repo: String) {
-                                            showDetails(user, repo)
-                                        }
-
-                                    })
-                                }
-                            })
-                })
+                .skipWhile { queryString -> queryString.isNotBlank() }
+                .doOnNext({ queryString -> searchGithub(queryString) })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
 
         compositeDisposable.add(searchIntent)
+    }
+
+    private fun searchGithub(queryString: String) {
+        github.search(mapOf("q" to queryString))
+                .enqueue(object : Callback<Result<List<Repo>>> {
+                    override fun onFailure(call: Call<Result<List<Repo>>>?, t: Throwable?) {
+                        //TODO: update error handling to notify the user
+                        Timber.tag("TAG").d(t?.message, t)
+                    }
+
+                    override fun onResponse(call: Call<Result<List<Repo>>>?, response: Response<Result<List<Repo>>>?) {
+                        val results: Result<List<Repo>> = response!!.body() ?: return
+                        val resultsView: RecyclerView = mvpView.findViewById(R.id.results)
+                        resultsView.layoutManager = LinearLayoutManager(mvpView.context)
+                        resultsView.adapter = SearchResultAdapter(results, object : SearchItemClickListener() {
+                                    override fun onItemClick(user: String, repo: String) {
+                                        showDetails(user, repo)
+                                    }
+
+                                })
+                    }
+                })
     }
 
     private fun showDetails(user: String, repo: String) {

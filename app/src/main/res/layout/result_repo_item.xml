@@ -50,6 +50,7 @@
                 android:layout_toEndOf="@+id/icon"
                 android:layout_toRightOf="@+id/icon"
                 android:gravity="center_vertical"
+                android:text="@{repo.description}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView

@@ -2,6 +2,7 @@ package com.victorude.github.di
 
 import android.app.Activity
 import android.app.Application
+import com.squareup.leakcanary.LeakCanary
 import com.victorude.github.BuildConfig
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -22,6 +23,13 @@ class App: Application(), HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingActivityInjector

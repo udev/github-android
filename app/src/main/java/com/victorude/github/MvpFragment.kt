@@ -1,6 +1,7 @@
 package com.victorude.github
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
@@ -33,6 +34,13 @@ abstract class MvpFragment : Fragment() {
         super.onDestroyView()
         // release getPresenter resources
         getPresenter().destroy()
+    }
+
+    companion object {
+        inline fun <reified T> getFragment(context: Context): T {
+            return (context as Activity).fragmentManager
+                    .findFragmentByTag(T::class.simpleName) as T
+        }
     }
 
     protected abstract fun getPresenter(): BasePresenter

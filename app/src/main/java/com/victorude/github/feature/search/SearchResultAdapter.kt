@@ -1,4 +1,4 @@
-package com.victorude.github.search
+package com.victorude.github.feature.search
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -26,6 +26,11 @@ class SearchResultAdapter(
         }
     }
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.unbind()
+    }
+
     private fun loadImage(avatar_url: String, view: View) {
         val imageView: ImageView = view.findViewById(R.id.icon)
         Picasso.with(view.context).load(avatar_url).into(imageView)
@@ -45,6 +50,10 @@ class SearchResultAdapter(
         fun bind(repo: Repo) {
             binding.repo = repo
             binding.executePendingBindings()
+        }
+
+        fun unbind() {
+            binding.unbind()
         }
     }
 }

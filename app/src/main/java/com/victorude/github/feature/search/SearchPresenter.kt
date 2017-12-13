@@ -1,4 +1,4 @@
-package com.victorude.github.search
+package com.victorude.github.feature.search
 
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
@@ -12,13 +12,12 @@ import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.common.ARG_REPO
 import com.victorude.github.common.ARG_USER
+import com.victorude.github.feature.repo.RepoDetailFragment
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
-import com.victorude.github.repo.RepoDetailFragment
 import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,7 +31,6 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
     @Inject
     lateinit var github: GitHubService
     lateinit var search: SearchView
-    override val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun setView(view: View) {
         super.setView(view)
@@ -78,7 +76,7 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
         fragment.arguments = bundle
         val activity: FragmentActivity = mvpView.context as FragmentActivity
         activity.fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, fragment, RepoDetailFragment::class.simpleName)
                 .addToBackStack("search")
                 .commit()
     }
@@ -89,10 +87,5 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 .filter { it.queryText().count() >= 3 }
                 .map { t: SearchViewQueryTextEvent -> t.queryText().toString() }
                 .debounce(500, TimeUnit.MILLISECONDS)
-    }
-
-    // release resources
-    override fun destroy() {
-        compositeDisposable.clear()
     }
 }

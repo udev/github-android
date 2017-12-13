@@ -1,7 +1,7 @@
-package com.victorude.github.di.search
+package com.victorude.github.di.github
 
 import android.app.Fragment
-import com.victorude.github.search.SearchFragment
+import com.victorude.github.feature.search.SearchFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector

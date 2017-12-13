@@ -12,5 +12,5 @@ interface GitHubService {
     fun search(@QueryMap options: Map<String, String>): Call<Result<List<Repo>>>
 
     @GET("repos/{owner}/{repo}")
-    fun repo(@Path("owner") owner: String, @Path("repo") repo: String): Call<Repo>
+    fun repo(@Path("owner") owner: String?, @Path("repo") repo: String?): Call<Repo>
 }

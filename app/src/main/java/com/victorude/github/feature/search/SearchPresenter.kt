@@ -1,18 +1,23 @@
 package com.victorude.github.feature.search
 
+import android.databinding.BindingAdapter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ImageView
 import android.widget.SearchView
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent
+import com.squareup.picasso.Picasso
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.common.ARG_REPO
 import com.victorude.github.common.ARG_USER
 import com.victorude.github.feature.repo.RepoDetailFragment
+import com.victorude.github.model.Repo
 import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,11 +32,14 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
     @Inject
     lateinit var github: GitHubService
     lateinit var search: SearchView
+    private lateinit var resultsView: RecyclerView
 
     override fun setView(view: View) {
         super.setView(view)
 
-        this.search = mvpView.findViewById(R.id.search)
+        search = mvpView.findViewById(R.id.search)
+        resultsView = mvpView.findViewById(R.id.results)
+        resultsView.layoutManager = LinearLayoutManager(mvpView.context)
 
         val searchIntent: Disposable = getIntent()
                 .observeOn(Schedulers.io())
@@ -42,13 +50,7 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                     }.observeOn(AndroidSchedulers.mainThread())
                 }
                 .subscribe({ results ->
-                    val resultsView: RecyclerView = mvpView.findViewById(R.id.results)
-                    resultsView.layoutManager = LinearLayoutManager(mvpView.context)
-                    resultsView.adapter = SearchResultAdapter(results!!, object : SearchItemClickListener() {
-                        override fun onItemClick(user: String, repo: String) {
-                            showDetails(user, repo)
-                        }
-                    })
+                    resultsView.adapter = SearchResultAdapter(results!!)
                 }, { throwable ->
                     Timber.e(throwable)
                 })
@@ -56,11 +58,12 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
         compositeDisposable.add(searchIntent)
     }
 
-    private fun showDetails(user: String, repo: String) {
+    fun showDetails(repo: Repo) {
+        val args = repo.full_name.split('/')
         val fragment = RepoDetailFragment()
         val bundle = Bundle()
-        bundle.putString(ARG_USER, user)
-        bundle.putString(ARG_REPO, repo)
+        bundle.putString(ARG_USER, args[0])
+        bundle.putString(ARG_REPO, args[1])
         fragment.arguments = bundle
         val activity: FragmentActivity = mvpView.context as FragmentActivity
         activity.fragmentManager.beginTransaction()
@@ -74,5 +77,13 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 .filter { it.queryText().count() >= 3 }
                 .map { t: SearchViewQueryTextEvent -> t.queryText().toString() }
                 .debounce(500, TimeUnit.MILLISECONDS)
+    }
+
+    companion object {
+        @JvmStatic
+        @BindingAdapter("bind:imageUrl", "bind:error")
+        fun loadImage(view: ImageView, url: String, error: Drawable) {
+            Picasso.with(view.context).load(url).error(error).into(view)
+        }
     }
 }

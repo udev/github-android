@@ -27,7 +27,8 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
+open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
+        SearchResultAdapter.OnItemClickListener {
 
     @Inject
     lateinit var github: GitHubService
@@ -50,7 +51,7 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                     }.observeOn(AndroidSchedulers.mainThread())
                 }
                 .subscribe({ results ->
-                    resultsView.adapter = SearchResultAdapter(results!!)
+                    resultsView.adapter = SearchResultAdapter(results!!, this)
                 }, { throwable ->
                     Timber.e(throwable)
                 })
@@ -58,8 +59,15 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
         compositeDisposable.add(searchIntent)
     }
 
-    fun showDetails(repo: Repo) {
-        val args = repo.full_name.split('/')
+    override fun getIntent(): Observable<String> {
+        return RxSearchView.queryTextChangeEvents(search)
+                .filter { it.queryText().count() >= 3 }
+                .map { t: SearchViewQueryTextEvent -> t.queryText().toString() }
+                .debounce(500, TimeUnit.MILLISECONDS)
+    }
+
+    override fun onItemClick(item: Repo) {
+        val args = item.full_name.split('/')
         val fragment = RepoDetailFragment()
         val bundle = Bundle()
         bundle.putString(ARG_USER, args[0])
@@ -70,13 +78,6 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 .replace(R.id.container, fragment, RepoDetailFragment::class.simpleName)
                 .addToBackStack("search")
                 .commit()
-    }
-
-    override fun getIntent(): Observable<String> {
-        return RxSearchView.queryTextChangeEvents(search)
-                .filter { it.queryText().count() >= 3 }
-                .map { t: SearchViewQueryTextEvent -> t.queryText().toString() }
-                .debounce(500, TimeUnit.MILLISECONDS)
     }
 
     companion object {

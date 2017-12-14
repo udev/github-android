@@ -7,12 +7,19 @@ import com.victorude.github.databinding.ResultRepoItemBinding
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
 
-class SearchResultAdapter(private val results: Result<List<Repo>>)
+class SearchResultAdapter(private val results: Result<List<Repo>>,
+                          private val listener: OnItemClickListener)
     : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Repo)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val repo: Repo = results.items[position]
         holder.bind(repo)
+        holder.itemView.tag = repo
+        holder.itemView.setOnClickListener { listener.onItemClick(repo) }
     }
 
     override fun onViewRecycled(holder: ViewHolder) {

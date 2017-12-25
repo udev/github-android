@@ -18,7 +18,7 @@ class RepoDetailFragment : MvpFragment() {
 
     @Inject lateinit var presenter: RepoDetailPresenter
 
-    var binding: FragmentRepoDetailBinding? = null
+    private var binding: FragmentRepoDetailBinding? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -49,5 +49,6 @@ class RepoDetailFragment : MvpFragment() {
     fun bind(repo: Repo) {
         binding?.repo = repo
         binding?.executePendingBindings()
+        binding?.invalidateAll()
     }
 }

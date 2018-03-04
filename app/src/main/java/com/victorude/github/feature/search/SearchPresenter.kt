@@ -1,17 +1,13 @@
 package com.victorude.github.feature.search
 
-import android.databinding.BindingAdapter
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
 import android.widget.SearchView
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent
-import com.squareup.picasso.Picasso
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.common.ARG_REPO
@@ -75,13 +71,5 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
                 .replace(R.id.container, fragment, RepoDetailFragment::class.simpleName)
                 .addToBackStack("search")
                 .commit()
-    }
-
-    companion object {
-        @JvmStatic
-        @BindingAdapter("bind:imageUrl", "bind:error")
-        fun loadImage(view: ImageView, url: String, error: Drawable) {
-            Picasso.with(view.context).load(url).error(error).into(view)
-        }
     }
 }

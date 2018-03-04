@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
 import com.victorude.github.common.ARG_REPO
-import com.victorude.github.common.ARG_USER
 import com.victorude.github.feature.repo.RepoDetailFragment
 import com.victorude.github.model.Repo
 import com.victorude.github.service.GitHubService
@@ -67,11 +66,9 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
     }
 
     override fun onItemClick(item: Repo) {
-        val args = item.full_name.split('/')
         val fragment = RepoDetailFragment()
         val bundle = Bundle()
-        bundle.putString(ARG_USER, args[0])
-        bundle.putString(ARG_REPO, args[1])
+        bundle.putParcelable(ARG_REPO, item)
         fragment.arguments = bundle
         val activity: FragmentActivity = mvpView.context as FragmentActivity
         activity.fragmentManager.beginTransaction()

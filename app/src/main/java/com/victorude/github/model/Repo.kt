@@ -1,5 +1,9 @@
 package com.victorude.github.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Repo(
     val id: Long,
     val name: String,
@@ -73,4 +77,4 @@ data class Repo(
     val watchers: Int,
     val default_branch: String,
     val score: Double
-)
+) : Parcelable

@@ -5,7 +5,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
-
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+androidExtensions {
+    experimental = true
+}
 buildscript {
     ext.dagger_version = '2.12'
     ext.anko_version = '0.10.3'

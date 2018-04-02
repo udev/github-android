@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="repo"
-            type="com.victorude.github.model.Repo" />
+            name="data"
+            type="com.victorude.github.model.GiphyData" />
     </data>
 
     <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,25 +19,31 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/description_owner_avatar"
+                android:padding="5dp"
                 app:error="@{@android:drawable/stat_notify_error}"
-                app:imageUrl="@{repo.owner.avatar_url}"
+                app:imageUrl="@{data.images.original.url}"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/repo_full_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{repo.full_name}" />
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:text="@{data.title}" />
 
             <TextView
                 android:id="@+id/repo_html_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{repo.html_url}" />
+                android:padding="10dp"
+                android:linksClickable="true"
+                android:autoLink="all"
+                android:text="@{data.url}" />
 
         </LinearLayout>
 

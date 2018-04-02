@@ -4,19 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.victorude.github.databinding.ResultRepoItemBinding
-import com.victorude.github.model.Repo
-import com.victorude.github.model.Result
+import com.victorude.github.model.GiphyData
 
-class SearchResultAdapter(private val results: Result<List<Repo>>,
+class SearchResultAdapter(private val results: Array<GiphyData>,
                           private val listener: OnItemClickListener)
     : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(item: Repo)
+        fun onItemClick(item: GiphyData)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val repo: Repo = results.items[position]
+        val repo: GiphyData = results[position]
         holder.bind(repo)
         holder.itemView.tag = repo
         holder.itemView.setOnClickListener { listener.onItemClick(repo) }
@@ -34,12 +33,12 @@ class SearchResultAdapter(private val results: Result<List<Repo>>,
     }
 
     override fun getItemCount(): Int {
-        return results.items.size
+        return results.size
     }
 
     class ViewHolder(private val binding: ResultRepoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(repo: Repo) {
-            binding.repo = repo
+        fun bind(data: GiphyData) {
+            binding.data = data
             binding.executePendingBindings()
         }
 

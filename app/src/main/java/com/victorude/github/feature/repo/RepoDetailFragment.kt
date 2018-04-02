@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import com.victorude.github.BasePresenter
 import com.victorude.github.MvpFragment
 import com.victorude.github.R
-import com.victorude.github.common.ARG_REPO
+import com.victorude.github.common.ARG_DATA
 import com.victorude.github.databinding.FragmentRepoDetailBinding
+import com.victorude.github.model.GiphyData
 import com.victorude.github.model.Repo
 import javax.inject.Inject
 
@@ -18,11 +19,11 @@ class RepoDetailFragment : MvpFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val repo: Repo = arguments.getParcelable(ARG_REPO)
+        val data: GiphyData = arguments.getParcelable(ARG_DATA)
         val binding = FragmentRepoDetailBinding.inflate(inflater!!, container, false)
         val view = binding.root
-        presenter.repo = repo
-        binding.repo = presenter.repo
+        presenter.data = data
+        binding.data = presenter.data
         return view
     }
 

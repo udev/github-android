@@ -10,9 +10,10 @@ import com.jakewharton.rxbinding2.widget.RxSearchView
 import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.R
-import com.victorude.github.common.ARG_REPO
+import com.victorude.github.common.ARG_DATA
 import com.victorude.github.feature.repo.RepoDetailFragment
-import com.victorude.github.model.Repo
+import com.victorude.github.model.GiphyData
+import com.victorude.github.service.API_KEY
 import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,11 +43,14 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap { queryString ->
                     Observable.fromCallable {
-                        github.search(mapOf("q" to queryString)).execute().body()
+                        github.search(API_KEY, mapOf("q" to queryString)).execute().body()
                     }.observeOn(AndroidSchedulers.mainThread())
                 }
-                .subscribe({ results ->
-                    resultsView.adapter = SearchResultAdapter(results!!, this)
+                .subscribe({ response ->
+                    resultsView.adapter = SearchResultAdapter(response!!.data, this)
+                    response!!.data.forEach {
+                        Timber.d(it.images.preview_gif.url)
+                    }
                 }, { throwable ->
                     Timber.e(throwable)
                 })
@@ -61,10 +65,10 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
                 .debounce(500, TimeUnit.MILLISECONDS)
     }
 
-    override fun onItemClick(item: Repo) {
+    override fun onItemClick(item: GiphyData) {
         val fragment = RepoDetailFragment()
         val bundle = Bundle()
-        bundle.putParcelable(ARG_REPO, item)
+        bundle.putParcelable(ARG_DATA, item)
         fragment.arguments = bundle
         val activity: FragmentActivity = mvpView.context as FragmentActivity
         activity.fragmentManager.beginTransaction()

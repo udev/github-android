@@ -15,7 +15,7 @@ class GithubModule {
     @Singleton
     fun provideGitHub(okHttpClient: OkHttpClient): GitHubService {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl("https://api.giphy.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)

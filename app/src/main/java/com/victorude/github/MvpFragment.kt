@@ -1,14 +1,15 @@
 package com.victorude.github
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.AndroidInjection
+import org.jetbrains.anko.find
 
 abstract class MvpFragment : Fragment() {
 
@@ -20,6 +21,10 @@ abstract class MvpFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // set title
+        val toolbar = activity.find<CollapsingToolbarLayout>(R.id.toolbar_layout)
+        toolbar.title = getTitle()
 
         // set the view
         getPresenter().setView(view!!)
@@ -36,13 +41,7 @@ abstract class MvpFragment : Fragment() {
         getPresenter().destroy()
     }
 
-    companion object {
-        inline fun <reified T> getFragment(context: Context): T {
-            return (context as Activity).fragmentManager
-                    .findFragmentByTag(T::class.simpleName) as T
-        }
-    }
-
     protected abstract fun getPresenter(): BasePresenter
     protected abstract fun getLayout(): Int
+    protected abstract fun getTitle(): String
 }

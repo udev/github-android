@@ -7,13 +7,18 @@ import javax.inject.Inject
 
 class SearchFragment : MvpFragment() {
 
-    @Inject lateinit var presenter: SearchPresenter
+    @Inject
+    lateinit var presenter: SearchPresenter
+
+    override fun getLayout(): Int {
+        return R.layout.fragment_search
+    }
 
     override fun getPresenter(): BasePresenter {
         return presenter
     }
 
-    override fun getLayout(): Int {
-        return R.layout.fragment_search
+    override fun getTitle(): String {
+        return getString(R.string.fragment_search_title)
     }
 }

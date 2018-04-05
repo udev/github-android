@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 class RepoDetailFragment : MvpFragment() {
 
-    @Inject lateinit var presenter: RepoDetailPresenter
+    @Inject
+    lateinit var presenter: RepoDetailPresenter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -26,11 +27,16 @@ class RepoDetailFragment : MvpFragment() {
         return view
     }
 
+    override fun getLayout(): Int {
+        return R.layout.fragment_repo_detail
+    }
+
     override fun getPresenter(): BasePresenter {
         return presenter
     }
 
-    override fun getLayout(): Int {
-        return R.layout.fragment_repo_detail
+    override fun getTitle(): String {
+        val repo: Repo = arguments.getParcelable(ARG_REPO)
+        return repo.full_name
     }
 }

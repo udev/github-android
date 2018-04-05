@@ -94,4 +94,7 @@
     <string name="repo_icon">repo icon</string>
     <string name="title_repo_details">Repo details</string>
     <string name="description_owner_avatar">owner avatar</string>
+    <string name="activity_main_title">GitHub Android</string>
+    <string name="fragment_search_title">Search GitHub</string>
+    <string name="description_application_icon">application icon</string>
 </resources>

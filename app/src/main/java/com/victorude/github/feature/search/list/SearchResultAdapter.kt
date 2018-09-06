@@ -1,4 +1,4 @@
-package com.victorude.github.feature.search
+package com.victorude.github.feature.search.list
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import com.victorude.github.databinding.ResultRepoItemBinding
 import com.victorude.github.model.Repo
 import com.victorude.github.model.Result
 
-class SearchResultAdapter(private val results: Result<List<Repo>>,
+class SearchResultAdapter(private val results: Result<MutableList<Repo>>,
                           private val listener: OnItemClickListener)
     : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
@@ -37,6 +37,15 @@ class SearchResultAdapter(private val results: Result<List<Repo>>,
         return results.items.size
     }
 
+    fun getPotentialItemCount(): Int {
+        return results.total_count
+    }
+
+    fun add(items: List<Repo>) {
+        results.items.addAll(items)
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(private val binding: ResultRepoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(repo: Repo) {
             binding.repo = repo
@@ -46,5 +55,9 @@ class SearchResultAdapter(private val results: Result<List<Repo>>,
         fun unbind() {
             binding.unbind()
         }
+    }
+
+    internal fun isItemCountMet(): Boolean {
+        return getPotentialItemCount() > itemCount
     }
 }

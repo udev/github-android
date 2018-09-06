@@ -1,7 +1,7 @@
 package com.victorude.github.di.github
 
 import android.app.Fragment
-import com.victorude.github.feature.repo.RepoDetailFragment
+import com.victorude.github.feature.search.detail.SearchDetailFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
@@ -12,7 +12,7 @@ import dagger.multibindings.IntoMap
 abstract class RepoDetailFragmentModule {
     @Binds
     @IntoMap
-    @FragmentKey(RepoDetailFragment::class)
+    @FragmentKey(SearchDetailFragment::class)
     abstract fun bindRepoDetailFragmentInjectorFactory(builder: RepoDetailFragmentSubcomponent.Builder)
             : AndroidInjector.Factory<out Fragment>
 }

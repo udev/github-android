@@ -1,4 +1,4 @@
-package com.victorude.github.feature.repo
+package com.victorude.github.feature.search.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,10 @@ import com.victorude.github.databinding.FragmentRepoDetailBinding
 import com.victorude.github.model.Repo
 import javax.inject.Inject
 
-class RepoDetailFragment : MvpFragment() {
+class SearchDetailFragment : MvpFragment() {
 
     @Inject
-    lateinit var presenter: RepoDetailPresenter
+    lateinit var presenter: SearchDetailPresenter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

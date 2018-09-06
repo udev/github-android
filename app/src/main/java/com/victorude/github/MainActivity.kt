@@ -3,8 +3,8 @@ package com.victorude.github
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
-import android.widget.FrameLayout
-import com.victorude.github.feature.search.SearchFragment
+import com.victorude.github.feature.auth.AuthFragment
+import com.victorude.github.feature.auth.AuthPresenter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -21,15 +21,14 @@ class MainActivity : FragmentActivity(), HasFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container_view)
 
-        if (findViewById<FrameLayout>(R.id.container) != null) {
-            if (savedInstanceState != null) {
-                return
+        if (savedInstanceState == null) {
+            val authFragment = AuthFragment()
+            authFragment.arguments = Bundle().run {
+                putString(AuthPresenter.STATE_UUID, intent.data?.getQueryParameter("state"))
+                this
             }
-
-            val searchFragment = SearchFragment()
-            searchFragment.arguments = intent.extras
             fragmentManager.beginTransaction()
-                    .add(R.id.container, searchFragment, SearchFragment::class.simpleName).commit()
+                    .add(R.id.container, authFragment, AuthFragment::class.simpleName).commit()
         }
     }
 

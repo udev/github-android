@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/fragment_search">
+    tools:context=".MainActivity">
 
-    <SearchView
+    <android.support.v7.widget.SearchView
         android:id="@+id/search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="366dp"
+        android:layout_height="47dp"
         android:background="@android:color/background_light"
-        android:queryHint="search github.com" />
+        android:queryHint="search github.com"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/results"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.victorude.github.feature.search.list.SearchRecyclerView
         android:id="@+id/results"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_width="365dp"
+        android:layout_height="499dp"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search">
 
-    </android.support.v7.widget.RecyclerView>
+    </com.victorude.github.feature.search.list.SearchRecyclerView>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

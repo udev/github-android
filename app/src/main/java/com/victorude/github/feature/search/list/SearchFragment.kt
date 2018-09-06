@@ -1,4 +1,4 @@
-package com.victorude.github.feature.search
+package com.victorude.github.feature.search.list
 
 import com.victorude.github.BasePresenter
 import com.victorude.github.MvpFragment

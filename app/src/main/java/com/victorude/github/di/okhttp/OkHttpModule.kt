@@ -10,9 +10,11 @@ class OkHttpModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
-        httpClient.addNetworkInterceptor { chain ->
+        httpClient.addInterceptor { chain ->
 
             val request = chain.request()
+            request.newBuilder()
+                    .header("User-Agent", "udev/github-android;dev 0.0.1")
 
             val t1 = System.nanoTime()
             Timber.tag("OkHttpClient").d("Sending request %s on %s%n%s",

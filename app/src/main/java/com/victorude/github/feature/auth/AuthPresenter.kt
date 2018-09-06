@@ -42,7 +42,8 @@ class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
     override fun setView(view: View) {
         super.setView(view)
 
-        getAccessCode().takeIf { !it.isEmpty() }.run { goToSearch() }
+        if (getAccessCode().isNotBlank())
+            goToSearch()
 
         fragment.activity.intent?.data.run {
             val code = this?.getQueryParameter("code")

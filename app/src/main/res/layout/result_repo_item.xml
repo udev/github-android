@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -11,59 +13,81 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         card_view:cardCornerRadius="4dp">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView xmlns:app="http://schemas.android.com/tools"
                 android:id="@+id/icon"
                 android:layout_width="114dp"
                 android:layout_height="92dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
                 android:contentDescription="@string/repo_icon"
                 app:error="@{@android:drawable/stat_notify_error}"
                 app:imageUrl="@{repo.owner.avatar_url}"
+                card_view:layout_constraintBottom_toTopOf="@+id/link"
+                card_view:layout_constraintEnd_toStartOf="@+id/description"
+                card_view:layout_constraintHorizontal_bias="0.25"
+                card_view:layout_constraintStart_toStartOf="@+id/full_name"
+                card_view:layout_constraintTop_toBottomOf="@+id/full_name"
                 card_view:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/icon"
-                android:layout_toRightOf="@+id/icon"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:singleLine="true"
                 android:text="@{repo.full_name}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                card_view:layout_constraintBottom_toTopOf="@+id/icon"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                tools:text="My Adequate Repo" />
 
             <TextView
                 android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/link"
-                android:layout_below="@+id/full_name"
-                android:layout_toEndOf="@+id/icon"
-                android:layout_toRightOf="@+id/icon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:gravity="center_vertical"
+                android:maxLines="5"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
                 android:text="@{repo.description}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                card_view:layout_constraintBottom_toTopOf="@+id/link"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/icon"
+                card_view:layout_constraintTop_toBottomOf="@+id/full_name"
+                tools:text="A fairly standard repository which exists solely for informational purposes" />
 
             <TextView
                 android:id="@+id/link"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/icon"
-                android:layout_toRightOf="@+id/icon"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:singleLine="true"
                 android:text="@{repo.html_url}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-        </RelativeLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="@+id/description"
+                card_view:layout_constraintHorizontal_bias="0.0"
+                card_view:layout_constraintStart_toStartOf="@+id/icon"
+                card_view:layout_constraintTop_toBottomOf="@+id/icon"
+                tools:text="https://www.example.com" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </layout>

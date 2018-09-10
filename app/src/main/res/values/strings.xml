@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">github</string>
+    <string name="app_name">Github Android Browser by @udev</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="action_settings">Settings</string>
     <string name="repo_icon">repo icon</string>
@@ -10,6 +10,8 @@
     <string name="description_application_icon">application icon</string>
     <string name="auth_hint_github_username">github username</string>
     <string name="auth_button_generate_app_token">Generate app specific token</string>
-    <string name="auth_button_login">Login</string>
+    <string name="auth_button_login">Get personal access token</string>
     <string name="fragment_auth_title">Login</string>
+    <string name="auth_personal_access_token">personal access token</string>
+    <string name="auth_go">Go!</string>
 </resources>

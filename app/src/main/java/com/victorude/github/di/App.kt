@@ -1,7 +1,7 @@
 package com.victorude.github.di
 
 import android.app.Activity
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 import com.squareup.leakcanary.LeakCanary
 import com.victorude.github.BuildConfig
 import dagger.android.AndroidInjector
@@ -11,7 +11,7 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
-class App: Application(), HasActivityInjector {
+class App: MultiDexApplication(), HasActivityInjector {
     @Inject
     lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
 
@@ -29,7 +29,7 @@ class App: Application(), HasActivityInjector {
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingActivityInjector

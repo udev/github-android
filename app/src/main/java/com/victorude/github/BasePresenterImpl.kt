@@ -19,8 +19,8 @@ abstract class BasePresenterImpl<T> : BasePresenter {
         mvpView = view
     }
 
-    abstract override fun restoreState(savedInstanceState: Bundle?)
-    abstract override fun saveState(): Bundle?
+    override fun restoreState(savedInstanceState: Bundle?) {}
+    override fun saveState(): Bundle? { return Bundle() }
     abstract fun getIntent(): Observable<T>
 
     // release resources
@@ -28,13 +28,13 @@ abstract class BasePresenterImpl<T> : BasePresenter {
         compositeDisposable.clear()
     }
 
-    final override fun setAccessCode(code: String) {
+    final override fun setAccessToken(code: String) {
         mvpView.context.getSharedPreferences(mvpView.context.packageName, MODE_PRIVATE).run {
             edit().putString(PREF_ACCESS_CODE, code).apply()
         }
     }
 
-    final override fun getAccessCode(): String {
+    final override fun getAccessToken(): String {
         return mvpView.context.getSharedPreferences(mvpView.context.packageName, MODE_PRIVATE).run {
             getString(PREF_ACCESS_CODE, "")
         }

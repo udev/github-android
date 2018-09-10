@@ -14,7 +14,7 @@ interface BasePresenter {
     fun restoreState(savedInstanceState: Bundle?)
     fun getName(): String
     fun destroy()
-    fun setAccessCode(code: String)
-    fun getAccessCode(): String
+    fun setAccessToken(code: String)
+    fun getAccessToken(): String
     fun invalidateAccessCode()
 }

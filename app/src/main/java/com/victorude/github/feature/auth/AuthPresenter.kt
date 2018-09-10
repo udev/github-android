@@ -2,15 +2,16 @@ package com.victorude.github.feature.auth
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.rx2.Rx2Apollo
 import com.jakewharton.rxbinding2.view.RxView
 import com.victorude.github.BasePresenterImpl
+import com.victorude.github.LoginUserQuery
 import com.victorude.github.R
 import com.victorude.github.common.DEBOUNCE
 import com.victorude.github.feature.search.list.SearchFragment
-import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
@@ -22,37 +23,16 @@ import javax.inject.Inject
 
 class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
 
-    @Inject
-    lateinit var github: GitHubService
     private val state: BehaviorSubject<String> = BehaviorSubject.create()
-
-    override fun restoreState(savedInstanceState: Bundle?) {
-        savedInstanceState?.run {
-            state.onNext(getString(STATE_UUID))
-        }
-    }
-
-    override fun saveState(): Bundle? {
-        return Bundle().run {
-            putString(STATE_UUID, state.value ?: "")
-            this
-        }
-    }
 
     override fun setView(view: View) {
         super.setView(view)
 
-        if (getAccessCode().isNotBlank())
-            goToSearch()
+        goToSearchIfTokenIsValid(getAccessToken())
 
-        fragment.activity.intent?.data.run {
-            val code = this?.getQueryParameter("code")
-            this?.getQueryParameter("state").let {
-                if (!it.isNullOrEmpty() && state.value == it) {
-                    Timber.d("GitHub OAuth2 grant successful")
-                    setAccessCode(code!!)
-                    goToSearch()
-                }
+        fragment.auth_button_go.setOnClickListener {
+            fragment.auth_access_token.text?.toString()?.let { token ->
+                goToSearchIfTokenIsValid(token)
             }
         }
 
@@ -60,8 +40,8 @@ class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 .map { state ->
                     openWebPage(state)
                 }
-                .subscribe({ response ->
-                    Timber.d("authentication response:\n$response.")
+                .subscribe({
+                    Timber.d("Creating a new personal access token")
                 }, { throwable: Throwable? ->
                     Timber.e(throwable)
                 })
@@ -85,19 +65,39 @@ class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
                 }
     }
 
-    fun openWebPage(state: String) {
-        val webpage = Uri.parse("https://github.com/login/oauth/authorize?client_id=817fae93ce823a0c0bf4&redirect_uri=udev://com.victorude.github&scope=repo:read&state=$state&allow_signup=true")
+    private val scheme: String = "https"
+    private val base_url: String = "github.com"
+    private val path: String = "/settings/tokens/new"
+    private val scopes: String = "user,public_repo,repo,repo_deployment,repo:status,read:repo_hook,read:org,read:public_key,read:gpg_key"
+
+    private fun openWebPage(state: String) {
+        val applicationInfo = mvpView.context.applicationInfo
+        val name = mvpView.context.packageManager.getApplicationLabel(applicationInfo)
+        val webpage = Uri.parse("$scheme://$base_url$path?scopes=$scopes&description=$name")
         val intent = Intent(Intent.ACTION_VIEW, webpage)
         if (intent.resolveActivity(fragment.activity.packageManager) != null) {
             startActivity(mvpView.context, intent, null)
         }
     }
 
-    override fun getName(): String {
-        return AuthPresenter::class.java.simpleName
+    private fun goToSearchIfTokenIsValid(token: String) {
+        val apolloClient = ApolloClient.builder()
+                .serverUrl("https://api.github.com/graphql?access_token=$token")
+                .build()
+        val query: LoginUserQuery = LoginUserQuery.builder().build()
+        val call = apolloClient.query(query)
+        val response = Rx2Apollo.from(call)
+                .subscribe({ response ->
+                    Timber.d("fresh!" + response.data()?.toString())
+                    setAccessToken(token)
+                    goToSearch()
+                }, {
+                    Timber.e(it)
+                })
+        compositeDisposable.add(response)
     }
 
-    companion object {
-        val STATE_UUID: String = "${AuthPresenter::class.java.simpleName}.STATE_UUID"
+    override fun getName(): String {
+        return AuthPresenter::class.java.simpleName
     }
 }

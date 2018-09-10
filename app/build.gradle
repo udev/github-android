@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'com.apollographql.android'
+
 androidExtensions {
     experimental = true
 }
@@ -20,6 +19,7 @@ android {
         applicationId "com.victorude.github"
         minSdkVersion 19
         targetSdkVersion 27
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "com.google.dagger:dagger:$dagger_version"
@@ -60,6 +61,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.apollographql.apollo:apollo-runtime:1.0.0-alpha2'
+    implementation 'com.apollographql.apollo:apollo-rx2-support:1.0.0-alpha2'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.

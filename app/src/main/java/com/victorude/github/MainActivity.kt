@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.victorude.github.feature.auth.AuthFragment
-import com.victorude.github.feature.auth.AuthPresenter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -23,10 +22,6 @@ class MainActivity : FragmentActivity(), HasFragmentInjector {
 
         if (savedInstanceState == null) {
             val authFragment = AuthFragment()
-            authFragment.arguments = Bundle().run {
-                putString(AuthPresenter.STATE_UUID, intent.data?.getQueryParameter("state"))
-                this
-            }
             fragmentManager.beginTransaction()
                     .add(R.id.container, authFragment, AuthFragment::class.simpleName).commit()
         }

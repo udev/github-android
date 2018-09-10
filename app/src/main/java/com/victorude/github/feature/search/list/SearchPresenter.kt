@@ -87,7 +87,7 @@ open class SearchPresenter @Inject constructor() : BasePresenterImpl<String>(),
 
     private fun getNextPage(queryString: String, p: Int): Observable<Result<MutableList<Repo>>> {
         return github.searchRepositories(mapOf(
-                "code" to getAccessCode(),
+                "code" to getAccessToken(),
                 "q" to queryString,
                 "page" to p.toString(),
                 "per_page" to 100.toString()

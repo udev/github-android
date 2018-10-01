@@ -3,7 +3,6 @@ package com.victorude.github.feature.search.detail
 import android.os.Bundle
 import com.victorude.github.BasePresenterImpl
 import com.victorude.github.model.Repo
-import com.victorude.github.service.GitHubService
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -19,8 +18,8 @@ class SearchDetailPresenter @Inject constructor() : BasePresenterImpl<Repo>() {
         }
     }
 
-    @Inject
-    lateinit var github: GitHubService
+//    @Inject
+//    lateinit var github: GitHubService
     lateinit var repo: Repo
 
     fun refresh() {
@@ -29,7 +28,8 @@ class SearchDetailPresenter @Inject constructor() : BasePresenterImpl<Repo>() {
 
     override fun getIntent(): Observable<Repo> {
         val args = repo.full_name.split('/')
-        return github.repo(args[0], args[1])
+//        return github.repo(args[0], args[1])
+        return Observable.empty()
     }
 
     override fun getName(): String {

@@ -4,11 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.rx2.Rx2Apollo
 import com.jakewharton.rxbinding2.view.RxView
 import com.victorude.github.BasePresenterImpl
-import com.victorude.github.LoginUserQuery
 import com.victorude.github.R
 import com.victorude.github.common.DEBOUNCE
 import com.victorude.github.feature.search.list.SearchFragment
@@ -23,16 +20,20 @@ import javax.inject.Inject
 
 class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
 
+//    @Inject
+//    lateinit var apolloClient: ApolloClient
+
     private val state: BehaviorSubject<String> = BehaviorSubject.create()
 
     override fun setView(view: View) {
         super.setView(view)
 
-        goToSearchIfTokenIsValid(getAccessToken())
+//        goToSearchIfTokenIsValid(getAccessToken())
 
         fragment.auth_button_go.setOnClickListener {
             fragment.auth_access_token.text?.toString()?.let { token ->
-                goToSearchIfTokenIsValid(token)
+//                goToSearchIfTokenIsValid(token)
+                goToSearch()
             }
         }
 
@@ -80,22 +81,19 @@ class AuthPresenter @Inject constructor() : BasePresenterImpl<String>() {
         }
     }
 
-    private fun goToSearchIfTokenIsValid(token: String) {
-        val apolloClient = ApolloClient.builder()
-                .serverUrl("https://api.github.com/graphql?access_token=$token")
-                .build()
-        val query: LoginUserQuery = LoginUserQuery.builder().build()
-        val call = apolloClient.query(query)
-        val response = Rx2Apollo.from(call)
-                .subscribe({ response ->
-                    Timber.d("fresh!" + response.data()?.toString())
-                    setAccessToken(token)
-                    goToSearch()
-                }, {
-                    Timber.e(it)
-                })
-        compositeDisposable.add(response)
-    }
+//    private fun goToSearchIfTokenIsValid(token: String) {
+//        val query: LoginUserQuery = LoginUserQuery.builder().build()
+//        val call = apolloClient.query(query)
+//        val response = Rx2Apollo.from(call)
+//                .subscribe({ response ->
+//                    Timber.d("fresh!" + response.data()?.toString())
+//                    setAccessToken(token)
+//                    goToSearch()
+//                }, {
+//                    Timber.e(it)
+//                })
+//        compositeDisposable.add(response)
+//    }
 
     override fun getName(): String {
         return AuthPresenter::class.java.simpleName
